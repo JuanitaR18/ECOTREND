@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Galería</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Galería de Fotos</h1>
+    <div class="gallery" id="gallery"></div>
+    <a href="camera.html" class="button">Capturar Otra Foto</a>
+    <a href="cart.html" class="button">Ver Carrito</a>
+
+    <script>
+        const gallery = document.getElementById('gallery');
+        let photos = JSON.parse(localStorage.getItem('photos')) || [];
+
+        // Mostrar fotos en la galería
+        photos.forEach((photo, index) => {
+            const photoDiv = document.createElement('div');
+            photoDiv.classList.add('photo');
+            photoDiv.innerHTML = `
+                <img src="${photo.data}" alt="Foto" width="180">
+                <div class="actions">
+                    <button class="like-btn" onclick="likePhoto(${index})">❤️ ${photo.likes} Me gusta</button>
+                    <button class="cart-btn" onclick="addToCart(${index})">Añadir al Carrito</button>
+                    <button class="delete-btn" onclick="deletePhoto(${index})">Eliminar</button>
+                </div>
+            `;
+            gallery.appendChild(photoDiv);
+        });
+
+        function likePhoto(index) {
+            photos[index].likes++;
+            localStorage.setItem('photos', JSON.stringify(photos));
+            location.reload(); // Recargar para mostrar el nuevo conteo de likes
+        }
+
+        function addToCart(index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push(photos[index]);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert("Añadido al carrito.");
+        }
+
+        function deletePhoto(index) {
+            photos.splice(index, 1); // Eliminar la foto del array
+            localStorage.setItem('photos', JSON.stringify(photos)); // Actualizar localStorage
+            location.reload(); // Recargar para reflejar cambios
+        }
+    </script>
+</body>
+
+</html>

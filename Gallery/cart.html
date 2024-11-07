@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito de Compras</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Carrito de Compras</h1>
+    <div class="cart" id="cart"></div>
+    <a href="gallery.html" class="button">Ir a la Galería</a>
+    <a href="camera.html" class="button">Capturar Otra Foto</a>
+
+    <script>
+        const cart = document.getElementById('cart');
+        let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Mostrar fotos en el carrito
+        cartItems.forEach((item, index) => {
+            const cartDiv = document.createElement('div');
+            cartDiv.classList.add('photo');
+            cartDiv.innerHTML = `
+                <img src="${item.data}" alt="Foto" width="180">
+                <button class="remove-btn" onclick="removeFromCart(${index})">Eliminar del Carrito</button>
+            `;
+            cart.appendChild(cartDiv);
+        });
+
+        function removeFromCart(index) {
+            cartItems.splice(index, 1); // Eliminar del carrito
+            localStorage.setItem('cart', JSON.stringify(cartItems)); // Actualizar localStorage
+            location.reload(); // Recargar para reflejar cambios
+        }
+    </script>
+</body>
+
+</html>
